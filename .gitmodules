@@ -15,3 +15,9 @@
 [submodule "thirdparty/lightmapper"]
 	path = thirdparty/lightmapper
 	url = https://github.com/ands/lightmapper.git
+[submodule "thirdparty/rlottie"]
+	path = thirdparty/rlottie
+	url = https://github.com/Samsung/rlottie.git
+[submodule "thirdparty/lunasvg"]
+	path = thirdparty/lunasvg
+	url = https://github.com/sammycage/lunasvg.git
