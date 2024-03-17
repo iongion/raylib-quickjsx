@@ -25,33 +25,34 @@ fi
 
 # sudo apt-get install gcc-multilib g++-multilib
 echo "Building lunasvg"
-cd thirdparty/lunasvg && \
-rm -fr builddir && \
-meson setup builddir --prefix="$PROJECT_HOME/.local" && \
-ninja -j 8 -C builddir install
-
-exit 0
+if [[ ! -f "$PROJECT_HOME/.local/lib/liblunasvg.a" ]]; then
+    cd "$PROJECT_HOME/thirdparty/lunasvg" && \
+    rm -fr build && \
+    cmake -B build -S . -DBUILD_SHARED_LIBS=OFF -DLUNASVG_BUILD_EXAMPLES=OFF -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_INSTALL_PREFIX="$PROJECT_HOME/.local" && \
+    cmake --build build --target lunasvg --config Release -- -j4 install && \
+    mkdir -p "$PROJECT_HOME/.local/lib/pkgconfig" && \
+    cp "$PROJECT_HOME/support/lunasvg.pc" "$PROJECT_HOME/.local/lib/pkgconfig" && \
+    sed -i "s#@LUNASVG_INSTALL_PREFIX@#$PROJECT_HOME/.local#g" "$PROJECT_HOME/.local/lib/pkgconfig/lunasvg.pc"
+fi
 
 echo "Building rlottie"
-cd thirdparty/rlottie && \
-rm -fr builddir && \
-meson setup builddir --prefix="$PROJECT_HOME/.local" && \
-ninja -j 8 -C builddir install
-
-# git clone --depth 1 --branch v2.3.1 https://github.com/sammycage/lunasvg.git
-# cd lunasvg
-# mkdir build
-# cd build
-# cmake -G "%VS_GENERATOR%" -DBUILD_SHARED_LIBS=OFF -DLUNASVG_BUILD_EXAMPLES=OFF ..
-# cmake --build . --target lunasvg --config Debug -- "/clp:ErrorsOnly"
-# cmake --build . --target lunasvg --config Release -- "/clp:ErrorsOnly"
-# cd ../../
+if [[ ! -f "$PROJECT_HOME/.local/lib/x86_64-linux-gnu/librlottie.a" ]]; then
+    cd "$PROJECT_HOME/thirdparty/rlottie" && \
+    rm -fr build && \
+    meson setup build --prefix="$PROJECT_HOME/.local" -Ddefault_library=static && \
+    ninja -j 8 -C build install
+fi
 
 echo "Building RmlUi"
-cd "$PROJECT_HOME/thirdparty/RmlUi" && \
+export LUNASVG_DIR="$PROJECT_HOME/thirdparty/lunasvg"
+export RLOTTIE_DIR="$PROJECT_HOME/thirdparty/rlottie"
+if [[ ! -f "$PROJECT_HOME/.local/lib/libRmlCore.a" ]]; then
+    cd "$PROJECT_HOME/thirdparty/RmlUi" && \
     rm -fr build && mkdir build && cd build && \
-    cmake -DBUILD_SAMPLES=ON -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=$BUILD_TYPE .. && \
-    make -j 8
+    PKG_CONFIG_PATH="$PROJECT_HOME/.local/lib/pkgconfig:$PROJECT_HOME/.local/lib/x86_64-linux-gnu/pkgconfig:$PKG_CONFIG_PATH" && \
+    cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_SAMPLES=ON -DENABLE_SVG_PLUGIN=ON -DENABLE_LOTTIE_PLUGIN=OFF -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_INSTALL_PREFIX="$PROJECT_HOME/.local" .. && \
+    make -j 8 install
+fi
 
 # sudo apt-get install gcc-multilib g++-multilib
 echo "Building quickjspp"
@@ -59,7 +60,8 @@ cd "$PROJECT_HOME/thirdparty/quickjspp" && \
     rm -fr .bin && rm -fr .build && \
     cp -f "$PROJECT_HOME/support/quickjsx-premake5.lua" premake5.lua && \
     premake5 gmake2 --cc=gcc --jsx --storage && \
-    make clean && make -j8 libquickjs.a
+    cd .build/gmake2 && make -j8 quickjs
+    #make clean && make -j8 libquickjs.a && make install
 
 cd "$PROJECT_HOME" && \
 echo "Cleaning up build directory" && \
@@ -68,4 +70,4 @@ rm -fr build && \
 echo "Generating build files" && \
 cmake -B "$BUILD_DIR" -DCMAKE_BUILD_TYPE=$BUILD_TYPE && \
 echo "Building" && \
-cmake --build "$BUILD_DIR" --config $BUILD_TYPE
+cmake --build "$BUILD_DIR" --config $CMAKE_BUILD_TYPE

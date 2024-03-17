@@ -1,0 +1,9 @@
+prefix=@LUNASVG_INSTALL_PREFIX@
+includedir=${prefix}/include
+libdir=${prefix}/lib
+
+Name: liblunasvg
+Description: A Library for rendering svg files.
+Version: 2.3.9
+Libs: -L${libdir} -llunasvg 
+Cflags: -I${includedir}

@@ -10,7 +10,7 @@
 	file:close()
   end)()  
   
-  
+
   newoption {
 	 trigger     = "jsx",
 	 description = "Will add JSX support"
@@ -71,6 +71,10 @@
 	  filter { "language:not C#" and "system:windows" }
 		  defines { "_CRT_SECURE_NO_WARNINGS" }
 		  buildoptions { "/std:c++latest" }
+		  systemversion "latest"
+
+	  filter { "language:not C#" and "system:unix" }
+		  buildoptions { "-std=c++14" }
 		  systemversion "latest"
   
 	  filter { }
