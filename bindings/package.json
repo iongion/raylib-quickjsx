@@ -1,0 +1,16 @@
+{
+  "name": "bindings",
+  "version": "1.0.1",
+  "description": "",
+  "scripts": {
+    "bindings:generate": "ts-node ./src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ts-loader": "^9.5.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.2"
+  }
+}

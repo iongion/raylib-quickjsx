@@ -1,0 +1,17 @@
+[submodule "thirdparty/quickjspp"]
+	path = thirdparty/quickjs
+	url = https://github.com/c-smile/quickjspp.git
+[submodule "thirdparty/raylib"]
+	path = thirdparty/raylib
+	url = https://github.com/raysan5/raylib.git
+	branch = main
+[submodule "thirdparty/raygui"]
+	path = thirdparty/raygui
+	url = https://github.com/raysan5/raygui.git
+	branch = main
+[submodule "thirdparty/RmlUi"]
+	path = thirdparty/RmlUi
+	url = https://github.com/mikke89/RmlUi.git
+[submodule "thirdparty/lightmapper"]
+	path = thirdparty/lightmapper
+	url = https://github.com/ands/lightmapper.git

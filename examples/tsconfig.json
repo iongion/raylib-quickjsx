@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    // get intellisense for the available platform APIs
+    "lib": ["es2020"]
+  }
+}
