@@ -63,7 +63,7 @@ if [[ ! -f "$PROJECT_HOME/.local/lib/quickjs/libquickjs.a" ]]; then
     sed -i "s#@QUICKJS_INSTALL_PREFIX@#$PROJECT_HOME/.local#g" "$PROJECT_HOME/thirdparty/quickjspp/Makefile"
     make clean && make -j8 libquickjs.a && make install && \
     cp "$PROJECT_HOME/support/quickjs.pc" "$PROJECT_HOME/.local/lib/pkgconfig" && \
-    sed -i "s#@LUNASVG_INSTALL_PREFIX@#$PROJECT_HOME/.local#g" "$PROJECT_HOME/.local/lib/pkgconfig/quickjs.pc"
+    sed -i "s#@QUICKJS_INSTALL_PREFIX@#$PROJECT_HOME/.local#g" "$PROJECT_HOME/.local/lib/pkgconfig/quickjs.pc"
     # premake5 gmake2 --cc=gcc --jsx --storage && \
     # cd .build/gmake2 && make -j8 quickjs
 fi
