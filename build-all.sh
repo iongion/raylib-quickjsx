@@ -56,12 +56,17 @@ fi
 
 # sudo apt-get install gcc-multilib g++-multilib
 echo "Building quickjspp"
-cd "$PROJECT_HOME/thirdparty/quickjspp" && \
-    rm -fr .bin && rm -fr .build && \
-    cp -f "$PROJECT_HOME/support/quickjsx-premake5.lua" premake5.lua && \
-    premake5 gmake2 --cc=gcc --jsx --storage && \
-    cd .build/gmake2 && make -j8 quickjs
-    #make clean && make -j8 libquickjs.a && make install
+if [[ ! -f "$PROJECT_HOME/.local/lib/quickjs/libquickjs.a" ]]; then
+    cd "$PROJECT_HOME/thirdparty/quickjspp" && \
+    rm -fr .bin && rm -fr .build && git clean -fx && git clean -fd && \
+    cp "$PROJECT_HOME/support/Makefile.quickjspp" "$PROJECT_HOME/thirdparty/quickjspp/Makefile" && \
+    sed -i "s#@QUICKJS_INSTALL_PREFIX@#$PROJECT_HOME/.local#g" "$PROJECT_HOME/thirdparty/quickjspp/Makefile"
+    make clean && make -j8 libquickjs.a && make install && \
+    cp "$PROJECT_HOME/support/quickjs.pc" "$PROJECT_HOME/.local/lib/pkgconfig" && \
+    sed -i "s#@LUNASVG_INSTALL_PREFIX@#$PROJECT_HOME/.local#g" "$PROJECT_HOME/.local/lib/pkgconfig/quickjs.pc"
+    # premake5 gmake2 --cc=gcc --jsx --storage && \
+    # cd .build/gmake2 && make -j8 quickjs
+fi
 
 cd "$PROJECT_HOME" && \
 echo "Cleaning up build directory" && \

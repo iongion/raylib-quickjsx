@@ -1,0 +1,9 @@
+prefix=@QUICKJS_INSTALL_PREFIX@
+includedir=${prefix}/include/quickjs
+libdir=${prefix}/lib/quickjs
+
+Name: libquickjs
+Description: A Library for embedding JS engine.
+Version: 2.3.9
+Libs: -L${libdir} -lquickjs 
+Cflags: -I${includedir}
